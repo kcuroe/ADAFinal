@@ -1,0 +1,24 @@
+---
+title: "ADAfinalcode"
+author: "Kate Curoe" "Alex Kanemaru" "Rachel Hammer"
+date: "April 3, 2019"
+output: word_document
+---
+
+```{r}
+#library to read excel
+library(readxl)
+
+
+#unpackaging the .tar.gz file from GSS
+untar("ADAfinaldata_2010.tar.gz", list=TRUE)
+untar("ADAfinaldata_2010.tar.gz", files="GSS.xls")
+ADAfinal <- read_excel("GSS.xls")
+ADAfinal
+
+
+#Frequencies of Variables
+table(ADAfinal$`Interested in environmental issues`)
+table(ADAfinal$`Temperature rise from climate change`)
+table(ADAfinal$`Car pollution danger to envir`)
+```
