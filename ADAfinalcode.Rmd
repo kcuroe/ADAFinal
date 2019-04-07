@@ -22,3 +22,92 @@ table(ADAfinal$`Interested in environmental issues`)
 table(ADAfinal$`Temperature rise from climate change`)
 table(ADAfinal$`Car pollution danger to envir`)
 ```
+```{r}
+#Renaming Variables
+names(ADAfinal)<-c("year", "temp", "con_env", "more_imp", "car_env", "help_env", "poli", "income", "race", "sex", "edu", "age", "ID", "ballot") 
+
+
+#Recoding variables
+
+#TEMP
+ADAfinal$temp_f[ADAfinal$temp=="Extremely dangerous for the environment"]<-1
+ADAfinal$temp_f[ADAfinal$temp=="Very dangerous"]<-2
+ADAfinal$temp_f[ADAfinal$temp=="Somewhat dangerous"]<-3
+ADAfinal$temp_f[ADAfinal$temp=="Not very dangerous, or"]<-4
+ADAfinal$temp_f[ADAfinal$temp=="Not dangerous at all for the environment?"]<-5
+ADAfinal$temp_f[ADAfinal$temp=="Don't know"]<-8
+
+ADAfinal$temp_f<-factor(ADAfinal$temp_f,
+      levels = c(1,2,3,4,5,8),
+      labels = c("Extremely", "Very", "Somewhat", "Not very", "Not at all", "Don't know"))
+
+#CON_ENV
+ADAfinal$con_env_f[ADAfinal$con_env=="Very concerned"]<-1
+ADAfinal$con_env_f[ADAfinal$con_env=="4"]<-2
+ADAfinal$con_env_f[ADAfinal$con_env=="3"]<-3
+ADAfinal$con_env_f[ADAfinal$con_env=="2"]<-4
+ADAfinal$con_env_f[ADAfinal$con_env=="Not at all concerned"]<-5
+ADAfinal$con_env_f[ADAfinal$con_env=="Don't know"]<-8
+
+ADAfinal$con_env_f<-factor(ADAfinal$con_env_f,
+      levels = c(1,2,3,4,5,8),
+      labels = c("Very", "Concerned", "Somewhat", "Not very", "Not at all", "Don't know"))
+
+#CAR_ENV
+ADAfinal$car_env_f[ADAfinal$car_env=="Extremely dangerous"]<-1
+ADAfinal$car_env_f[ADAfinal$car_env=="Very dangerous"]<-2
+ADAfinal$car_env_f[ADAfinal$car_env=="Somewhat dangerous"]<-3
+ADAfinal$car_env_f[ADAfinal$car_env=="Not very dangerous"]<-4
+ADAfinal$car_env_f[ADAfinal$car_env=="Not dangerous"]<-5
+ADAfinal$car_env_f[ADAfinal$car_env=="Don't know"]<-8
+
+ADAfinal$car_env_f<-factor(ADAfinal$car_env_f,
+      levels = c(1,2,3,4,5,8),
+      labels = c("Extremely", "Very", "Somewhat", "Not very", "Not at all", "Don't know"))
+
+#POLI
+ADAfinal$poli_f[ADAfinal$poli=="Strong democrat" | ADAfinal$poli=="Not str democrat"]<-1
+ADAfinal$poli_f[ADAfinal$poli=="Ind,near dem" | ADAfinal$poli=="Independent" | ADAfinal$poli=="Ind,near rep"]<-2
+ADAfinal$poli_f[ADAfinal$poli=="Strong republican" | ADAfinal$poli=="Not str republican"]<-3
+ADAfinal$poli_f[ADAfinal$poli=="Other party"]<-4
+
+ADAfinal$poli_f<-factor(ADAfinal$poli_f,
+      levels = c(1,2,3,4),
+      labels = c("Democrat", "Independent", "Republican", "Other Party"))
+
+#INCOME
+ADAfinal$income_f[ADAfinal$income=="Lt $1000" | ADAfinal$income=="$1000 to 2999" | ADAfinal$income=="$3000 to 3999" | ADAfinal$income=="$4000 to 4999" | ADAfinal$income=="$5000 to 5999" | ADAfinal$income=="$6000 to 6999" | ADAfinal$income=="$7000 to 7999" | ADAfinal$income=="$8000 to 9999" | ADAfinal$income=="$10000 - 14999" | ADAfinal$income=="$15000 - 19999" | ADAfinal$income=="$15000 - 19999" | ADAfinal$income=="$20000 - 24999"]<-1
+ADAfinal$income_f[ADAfinal$income=="$25000 or more"] <-2
+ADAfinal$income_f[ADAfinal$income=="Refused"] <-9
+ADAfinal$income_f[ADAfinal$income=="Don't know"] <-8
+
+ADAfinal$income_f<-factor(ADAfinal$income_f,
+      levels = c(1,2,9,8),
+      labels = c("Less than $25000", "$25000 or more", "Refused", "Don't know"))
+
+#RACE
+ADAfinal$race_f[ADAfinal$race=="White"]<-1
+ADAfinal$race_f[ADAfinal$race=="Black"]<-2
+ADAfinal$race_f[ADAfinal$race=="Other"]<-3
+
+ADAfinal$race_f<-factor(ADAfinal$race_f,
+      levels = c(1,2,3),
+      labels = c("White", "Black", "Other"))
+
+#SEX
+ADAfinal$sex_f[ADAfinal$sex=="Male"]<-1
+ADAfinal$sex_f[ADAfinal$sex=="Female"]<-2
+
+ADAfinal$sex_f<-factor(ADAfinal$sex_f,
+      levels = c(1,2),
+      labels = c("Male", "Female"))
+
+#EDU
+ADAfinal$edu_n<-as.numeric(ADAfinal$edu)
+ADAfinal$edu_n[ADAfinal$edu_n >20]<-NA
+
+#AGE
+ADAfinal$age_n[ADAfinal$age=="89 or older"] <-89
+ADAfinal$age_n<-as.numeric(ADAfinal$age_n)
+ADAfinal$age_n[ADAfinal$age_n >89]<-NA
+```
