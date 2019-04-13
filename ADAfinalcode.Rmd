@@ -11,6 +11,8 @@ library(readxl)
 #test assumption of multicollinearity 
 install.packages("faraway")
 library(faraway)
+library(ggplot2)
+library(car)
 
 
 #unpackaging the .tar.gz file from GSS
@@ -125,8 +127,36 @@ ADAfinal$age_n[ADAfinal$age_n >89]<-NA
 assumptions.data<-data.frame(ADAfinal[,c(15,16,17,18,19,20,21,22,23)])
 ```
 - A linear relationship between any continuous independent variables and the logit transformation of the dependent variable
-- No outliers or highly influential points (Pregibon's (1981) deltabeta or Cook's distance)
+```{r}
+#AGE
+age.Logit<-ADAfinal$age_n*log(ADAfinal$age_n)#create term to test linearity
+#predictions on the right, outcomes on the left
+boxTidwellAGE<-glm(poli_f~age_n+age.Logit, data=ADAfinal, family="binomial")
+summary(boxTidwellAGE)
 
+#EDUCATION
+edu.Logit<-ADAfinal$edu_n*log(ADAfinal$edu_n)#create term to test linearity
+#predictions on the right, outcomes on the left
+boxTidwellEDU<-glm(poli_f~edu_n+edu.Logit, data=ADAfinal, family="binomial")
+summary(boxTidwellEDU)
+```
+- No outliers or highly influential points (Pregibon's (1981) deltabeta or Cook's distance)
+```{r}
+cooks<-glm(poli_f~ temp_f +car_env_f + con_env_f + age_n + edu_n + race_f, data=ADAfinal, family = "binomial")
+
+summary(cooks)
+
+#Determine influential observations using Cook's Distance plot. 
+#identify observations 
+plot(cooks, which=4, id.n=5, col="red", cex.id=0.60)
+
+y<-as.data.frame(cooks.distance(cooks))
+colnames(y)[1]<-"Cooks Distance"
+y$obs_no<-rownames(y)
+z<-y[which(y$CD>0.0015),]
+z$obs_no
+
+```
 #Data Analysis - Multinomial Logistic Regression 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #install packages
@@ -142,7 +172,7 @@ library(MASS) #Ordinal logistic regression
 ```
 
 #Execute a mutilnomial logistic regression
-##MODELS A (temp_mod, conc_mod, car_env_mod_c)
+##MODELS A (temp_mod, conc_mod, car_env_mod)
 ```{r, echo=TRUE, warning=FALSE}
 #Attach the data to avoid repeatly typing the dataset name 
 attach(ADAfinal)
