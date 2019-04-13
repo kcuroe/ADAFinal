@@ -152,7 +152,7 @@ plot(cooks, which=4, id.n=5, col="red", cex.id=0.60)
 
 y<-as.data.frame(cooks.distance(cooks))
 colnames(y)[1]<-"Cooks Distance"
-y$obs_no<-rownames(y)
+y$obs_no<-rownames(y) #this could be wrong....
 z<-y[which(y$CD>0.0015),]
 z$obs_no
 
