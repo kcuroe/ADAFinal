@@ -9,7 +9,7 @@ output: word_document
 #library to read excel
 library(readxl)
 #test assumption of multicollinearity 
-install.packages("faraway")
+#install.packages("faraway")
 library(faraway)
 library(ggplot2)
 library(car)
@@ -157,6 +157,43 @@ z<-y[which(y$CD>0.0015),]
 z$obs_no
 
 ```
+- Multicollinearity
+```{r}
+vif(ModelB2)   #warning about it not using the intercept and it produces widly high vif...
+
+#correlation test between the 2 continuous independent variables
+cor.test(age_n, edu_n, use = "complete.obs")   #sig p-value suggests that they are correlated
+
+#chi-square test for associations between the categorical independent variables
+chisq.test(temp_f, car_env_f)
+chisq.test(temp_f, con_env_f)
+chisq.test(temp_f, race_f)
+chisq.test(car_env_f, con_env_f)
+chisq.test(car_env_f, race_f)
+chisq.test(con_env_f, race_f)
+#they are all statistically significantly associated with each other...
+
+#anova to test if mean age or education differs across groups of the categorical independent variables
+fit<-aov(age_n~temp_f)
+summary(fit)
+fit2<-aov(age_n~car_env_f)
+summary(fit2)
+fit3<-aov(age_n~con_env_f)
+summary(fit3)
+fit4<-aov(age_n~race_f)
+summary(fit4)
+fit5<-aov(edu_n~temp_f)
+summary(fit5)
+fit6<-aov(edu_n~car_env_f)
+summary(fit6)
+fit7<-aov(edu_n~con_env_f)
+summary(fit7)
+fit8<-aov(edu_n~race_f)
+summary(fit8)
+#all are significant except age by car-env-f
+```
+
+
 #Data Analysis - Multinomial Logistic Regression 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #install packages
