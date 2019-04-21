@@ -317,6 +317,8 @@ ci
 #MODEL B2 - ALL MODELS + COVARIATES 
 ```{r}
 ModelB2<- multinom(poli_f ~ temp_f +car_env_f + con_env_f + age_n + edu_n + race_f) 
+#default is to omit missing
+
 
 ## extract the coefficients from the model and exponentiate to get OR
 exp(coef(ModelB2))
@@ -327,3 +329,119 @@ exp(confint(ModelB2, level=0.95))
 ci <- confint(ModelB2)
 ci
 ```
+
+##Table 1 - Study population characteristics
+#demographics - age, race, income, education, sex, political party, environmental concern, car pollution danger, temp rise danger
+```{r}
+#packages
+#install.packages("gmodels")
+library(gmodels)
+
+#complete cases only - removing any missing observations because default of multinom
+#defining variables to include in the complete data set
+myvars <- c("poli_f", "age_n", "edu_n", "race_f", "income_f", "sex_f", "con_env_f", "car_env_f", "temp_f")
+
+#subsetting by those variables
+ADAfinal.x<-ADAfinal[myvars]
+
+#omitting NA's in the data set
+ADAfinal.x <- na.omit(ADAfinal.x)
+
+#checking to make sure there are no NA's
+summary(ADAfinal.x)
+###total n = 1405
+
+
+#distribution of age - entire pop
+mean(ADAfinal.x$age_n, na.rm = T)
+sd(ADAfinal.x$age_n, na.rm = T)
+summary(ADAfinal.x$age_n)
+
+#distribution of age - outcome categories
+aggregate(ADAfinal.x$age_n, list(ADAfinal.x$poli_f), mean, na.rm=T)
+aggregate(ADAfinal.x$age_n, list(ADAfinal.x$poli_f), sd, na.rm=T)
+
+
+#distribution of education - entire pop
+mean(ADAfinal.x$edu_n, na.rm = T)
+sd(ADAfinal.x$edu_n, na.rm = T)
+
+#distribution of education - outcome categories
+aggregate(ADAfinal.x$edu_n, list(ADAfinal.x$poli_f), mean, na.rm=T)
+aggregate(ADAfinal.x$edu_n, list(ADAfinal.x$poli_f), sd, na.rm=T)
+
+
+#distribution of race - entire pop
+table(ADAfinal.x$race_f)
+proportions <- table(ADAfinal.x$race_f)/length(ADAfinal.x$race_f)
+proportions*100
+
+#distribution of race - outcome categories
+#table(ADAfinal.x$race_f, ADAfinal.x$poli_f)
+#prop.table(table(ADAfinal.x$race_f, ADAfinal.x$poli_f))*100
+CrossTable(ADAfinal.x$race_f, ADAfinal.x$poli_f, 
+           prop.r=TRUE, prop.c=TRUE, prop.t=TRUE)
+
+#distribution of income - entire pop
+#table(ADAfinal.x$income_f)
+#proportions <- table(ADAfinal.x$income_f)/length(ADAfinal.x$income_f)
+#proportions*100
+
+#distribution of income
+#prop.table(table(ADAfinal.x$income_f, ADAfinal.x$poli_f))
+#table(ADAfinal.x$income_f, ADAfinal.x$poli_f)
+CrossTable(ADAfinal.x$income_f, ADAfinal.x$poli_f, 
+           prop.r=TRUE, prop.c=TRUE, prop.t=TRUE)
+
+#distribution of sex - entire pop
+#table(ADAfinal.x$sex_f)
+#proportions <- table(ADAfinal.x$sex_f)/length(ADAfinal.x$sex_f)
+#proportions*100
+
+#distribution of sex
+#prop.table(table(ADAfinal.x$sex_f, ADAfinal.x$poli_f))
+#table(ADAfinal.x$sex_f, ADAfinal.x$poli_f)
+CrossTable(ADAfinal.x$sex_f, ADAfinal.x$poli_f, 
+           prop.r=TRUE, prop.c=TRUE, prop.t=TRUE)
+
+#distribution of env concern - entire pop
+#table(ADAfinal.x$con_env_f)
+#proportions <- table(ADAfinal.x$con_env_f)/length(ADAfinal.x$con_env_f)
+#proportions*100
+
+#distribution of env concern - outcome categories
+#prop.table(table(ADAfinal.x$con_env_f, ADAfinal.x$poli_f))
+#table(ADAfinal.x$con_env_f, ADAfinal.x$poli_f)
+CrossTable(ADAfinal.x$con_env_f, ADAfinal.x$poli_f, 
+           prop.r=TRUE, prop.c=TRUE, prop.t=TRUE)
+
+#distribution of car pollution - entire pop
+#table(ADAfinal.x$car_env_f)
+#proportions <- table(ADAfinal.x$car_env_f)/length(ADAfinal.x$car_env_f)
+#proportions*100
+
+#distribution of car pollution - outcome categories
+#prop.table(table(ADAfinal.x$car_env_f, ADAfinal.x$poli_f))
+#table(ADAfinal.x$car_env_f, ADAfinal.x$poli_f)
+CrossTable(ADAfinal.x$car_env_f, ADAfinal.x$poli_f, 
+           prop.r=TRUE, prop.c=TRUE, prop.t=TRUE)
+
+#distribution of temp rise - entire pop
+# table(ADAfinal.x$temp_f)
+# proportions <- table(ADAfinal.x$temp_f)/length(ADAfinal.x$temp_f)
+# proportions*100
+
+#distribution of temp rise - outcome categories
+# prop.table(table(ADAfinal.x$temp_f, ADAfinal.x$poli_f))
+# table(ADAfinal.x$temp_f, ADAfinal.x$poli_f)
+CrossTable(ADAfinal.x$temp_f, ADAfinal.x$poli_f, 
+           prop.r=TRUE, prop.c=TRUE, prop.t=TRUE)
+
+#distribution of political partry - entire pop
+table(ADAfinal.x$poli_f)
+proportions <- table(ADAfinal.x$poli_f)/length(ADAfinal.x$poli_f)
+proportions*100
+table(ADAfinal.x$poli_f)
+
+```
+
