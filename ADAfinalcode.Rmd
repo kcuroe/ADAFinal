@@ -14,13 +14,11 @@ library(faraway)
 library(ggplot2)
 library(car)
 
-
 #unpackaging the .tar.gz file from GSS
 untar("ADAfinaldata_2010.tar.gz", list=TRUE)
 untar("ADAfinaldata_2010.tar.gz", files="GSS.xls")
 ADAfinal <- read_excel("GSS.xls")
 ADAfinal
-
 
 #Frequencies of Variables
 table(ADAfinal$`Interested in environmental issues`)
@@ -193,7 +191,6 @@ summary(fit8)
 #all are significant except age by car-env-f
 ```
 
-
 #Data Analysis - Multinomial Logistic Regression 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #install packages
@@ -293,11 +290,6 @@ ci <- confint(car_env_mod_c)
 ci
 ```
 
-#MODEL A - MULTIPLE MODELS 
-```{r}
-ModelA<-
-```
-
 #MODEL B - ALL IV's IN ONE 
 ```{r}
 ModelB<- multinom(poli_f ~ temp_f +car_env_f + con_env_f)
@@ -311,14 +303,11 @@ exp(confint(ModelB, level=0.95))
 #Get confidence intervals for the log odds using confint function
 ci <- confint(ModelB)
 ci
-
 ```
 
 #MODEL B2 - ALL MODELS + COVARIATES 
 ```{r}
-ModelB2<- multinom(poli_f ~ temp_f +car_env_f + con_env_f + age_n + edu_n + race_f) 
-#default is to omit missing
-
+ModelB2<- multinom(poli_f ~ temp_f +car_env_f + con_env_f + age_n + edu_n + race_f) #default is to omit missing
 
 ## extract the coefficients from the model and exponentiate to get OR
 exp(coef(ModelB2))
